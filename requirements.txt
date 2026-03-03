@@ -1,5 +1,6 @@
-opencv-python>=4.1.2
+opencv-python-headless
 numpy
 scipy
 streamlit
+
 
