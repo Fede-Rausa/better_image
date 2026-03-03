@@ -307,15 +307,15 @@ def theme_changer(insidebar=False):
         st.markdown(dark_theme_css, unsafe_allow_html=True)
 
 
-
-# def set_logo(path, size='large'):
-#     st.set_page_config(page_icon = path)
-#     st.logo(path, size = 'large')
+def set_logo(path, size='large'):
+    st.set_page_config(page_icon = path)
+    st.logo(path, size = 'large')
 
 logo_path= 'example_projects//streamlit_deploy//better_image_logo.png'
 
 def streamlit_loop():
     st.image(logo_path, width=100)
+    set_logo(logo_path)
     theme_changer(False)
     st.title("better image")
     st.subheader("An app to denoise, enhance, and apply filters to images")
@@ -333,7 +333,7 @@ def streamlit_loop():
     selected = []
     activations = []
 
-    st.sidebar.image(logo_path, width=50)
+    #st.sidebar.image(logo_path, width=50)
     st.sidebar.header('Step filters')
     helpme = st.sidebar.checkbox(label='help', key='help me')
     if helpme:
@@ -396,6 +396,7 @@ def streamlit_loop():
 
 if __name__=='__main__':
     streamlit_loop()
+
 
 
 
