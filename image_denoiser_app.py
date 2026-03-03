@@ -331,7 +331,7 @@ def theme_changer(insidebar=False):
 #     st.set_page_config(page_icon = path)
 #     st.logo(path, size = 'large')
 
-logo_path= 'example_projects//streamlit_deploy//better_image_logo.png'
+logo_path= 'better_image_logo.png'
 
 def streamlit_loop():
     st.image(logo_path, width=100)
@@ -416,6 +416,7 @@ def streamlit_loop():
 
 if __name__=='__main__':
     streamlit_loop()
+
 
 
 
