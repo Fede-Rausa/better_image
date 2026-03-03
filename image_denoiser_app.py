@@ -238,8 +238,8 @@ def theme_changer(insidebar=False):
     # Update theme
     if theme.lower() != st.session_state.theme:
         st.session_state.theme = theme.lower()
-        #st.rerun()
-        st.experimental_rerun()
+        st.rerun()
+        #st.experimental_rerun()
     # Comprehensive dark theme CSS
 
     darktheme = (st.session_state.theme == 'Dark⏾'.lower())
@@ -327,13 +327,15 @@ def theme_changer(insidebar=False):
 
 
 
-# def set_logo(path, size='large'):
-#     st.set_page_config(page_icon = path)
-#     st.logo(path, size = 'large')
+def set_logo(path, size='large'):
+    st.set_page_config(page_icon = path)
+    st.logo(path, size = 'large')
 
-logo_path= 'better_image_logo.png'
+
 
 def streamlit_loop():
+    logo_path= 'better_image_logo.png'
+    set_logo(logo_path)
     st.image(logo_path, width=100)
     theme_changer(False)
     st.title("better image")
@@ -416,6 +418,7 @@ def streamlit_loop():
 
 if __name__=='__main__':
     streamlit_loop()
+
 
 
 
