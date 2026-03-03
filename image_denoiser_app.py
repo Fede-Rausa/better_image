@@ -152,7 +152,7 @@ or using a median kernel (takes the median of the patch). The parameter sigmaX i
 If You prefer quality to computational speed, check the bilateral filter.
 ''')
         mode=st.sidebar.selectbox(label='mode', key='mode'+step_id, options=['gaussian', 'median'])
-        ks = st.sidebar.number_input(label='Kernel Size', key='Kernel Size'+step_id, value=5, min_value=3, max_value=54, step=2)
+        ks = st.sidebar.number_input(label='Kernel Size', key='Kernel Size'+step_id, value=5, min_value=1, max_value=54, step=2)
         sigmaX = st.sidebar.slider(label='Sigma X',key='Sigma X'+step_id, value=0.0, min_value=0.0, max_value=400.0, step=0.01)
         return {'ks':ks, 'sigmaX':sigmaX, 'mode':mode}
     
@@ -176,7 +176,7 @@ providing the correct level of contrast and brightness.
 This is a filter that exploits the median filter, the bilateral filter 
 and some other opencv functions to cartoonish the images.
 ''')
-        strength = st.sidebar.slider(label='strength', key='strength'+step_id, value=250, min_value=100, max_value=1000)
+        strength = st.sidebar.slider(label='strength', key='strength'+step_id, value=250, min_value=1, max_value=255)
         ks_median = st.sidebar.number_input(label='Kernel Size Median', key='Kernel Size Median'+step_id, value=5, min_value=3, max_value=54, step=2)
         ks_threshold = st.sidebar.number_input(label='Kernel Size Threshold', key='Kernel Size Threshold'+step_id, value=9, min_value=3, max_value=54, step=2)
         ks_bilateral = st.sidebar.number_input(label='Kernel Size Bilateral', key='Kernel Size Bilateral'+step_id, value=9, min_value=3, max_value=54, step=2)
@@ -192,7 +192,7 @@ The bilateral filter is an image denoiser much robust to blur than the gaussian 
 It is used as them because is much more computationally expensive.
 ''')
         ks = st.sidebar.number_input(label='Distance', key='Kernel Size'+step_id, value=9, min_value=3, max_value=54, step=2)
-        strength = st.sidebar.slider(label='strength', key='strength'+step_id, value=250, min_value=100, max_value=1000)
+        strength = st.sidebar.slider(label='strength', key='strength'+step_id, value=250, min_value=1, max_value=255)
         return {'strength':strength, 'ks':ks}
 
 
