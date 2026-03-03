@@ -25,26 +25,6 @@ def cartoonify(image, ks_median=5, ks_threshold=9, ks_bilateralFilter=9, cartoon
 
 
 
-def denoise_image(image, use_clahe=True, use_gblur=True, use_mblur=True, use_kalman=True):
-
-    image0 = image.copy()
-    image0 = np.array(image0.copy())
-
-    if use_kalman:
-        image0 = kalman_rgb_img_denoiser41(image0, R=400, Q=100, mode='both', once=False, type='adaptive')
-
-    if use_mblur:
-        image0 = cv2.medianBlur(image0, ksize=11)
-
-    if use_clahe:
-        myclahe = clahe_free(mode='hsv')
-        image0 = myclahe.apply(image0)
-
-    if use_gblur:
-        image0 = cv2.GaussianBlur(image0, ksize=(11,11), sigmaX=0)
-
-    return image0.astype(np.uint8)
-
 
 
 
@@ -136,15 +116,16 @@ and is the one more robust to blurry effects.
                                 
 - rgb_cov: it is the unique type that takes advantage of the covariance Q_cov.\n
 Here Q_cov is the covariance between the colors of the same pixel on different channels.
-So for this filte R and Q are 3x3 matrices.\n R is diagonal. \n Q = I*Q_var + Q_cov - I*Q_cov
+So for this filte R and Q are 3x3 matrices.\n R is diagonal. \n Q = IQ_var + Q_cov - IQ_cov \n
+where I is the identity 3x3, while W_var and W_cov are two scalars
 
          
 If You select mode both,
-then You create 4 kalman filters of the same type for each channel (so 4*3=12 kf in total): 
+then You create 4 kalman filters of the same type for each channel (so 4x3=12 kf in total): 
 two that slides vertically over the image, in opposite directions,
 and two that slides horizontally over the image.
 The final prediction of each pixel channel is then the mean of the kalman filters used for the channel.
-If You select mode hor, or ver, You use just 2 kalman filters per channel (2*3=6 kf in total)
+If You select mode hor, or ver, You use just 2 kalman filters per channel (2x3=6 kf in total)
 that slides horizontally in opposite directions (or vertically).
            
 If the type You select is rgb_cov, then all the channels are estimated by each single kalman filter,
@@ -238,8 +219,8 @@ def theme_changer(insidebar=False):
     # Update theme
     if theme.lower() != st.session_state.theme:
         st.session_state.theme = theme.lower()
-        st.rerun()
-        #st.experimental_rerun()
+        #st.rerun()
+        st.experimental_rerun()
     # Comprehensive dark theme CSS
 
     darktheme = (st.session_state.theme == 'Dark⏾'.lower())
@@ -327,15 +308,13 @@ def theme_changer(insidebar=False):
 
 
 
-def set_logo(path, size='large'):
-    st.set_page_config(page_icon = path)
-    st.logo(path, size = 'large')
+# def set_logo(path, size='large'):
+#     st.set_page_config(page_icon = path)
+#     st.logo(path, size = 'large')
 
-
+logo_path= 'example_projects//streamlit_deploy//better_image_logo.png'
 
 def streamlit_loop():
-    logo_path= 'better_image_logo.png'
-    set_logo(logo_path)
     st.image(logo_path, width=100)
     theme_changer(False)
     st.title("better image")
@@ -347,7 +326,7 @@ def streamlit_loop():
     if not image_file:
         return None
     original_image = Image.open(image_file)
-    image0 = original_image.copy()
+    original_image = original_image.convert('RGB') ###really important
 
     available_ops = ['nothing', 'enhance','clahe', 'blur', 'bilateral', 'kalman',  'cartoonify']
     operations = []
@@ -378,7 +357,7 @@ def streamlit_loop():
         operations.append(op)
         activations.append(is_active)
 
-
+    image0 = np.array(original_image.copy())  ###really important too
     for i in range(Nsteps):
         if activations[i]:
             image0 = denoise_image(label=selected[i], image=image0, op=operations[i])
@@ -392,12 +371,11 @@ def streamlit_loop():
         col1.image(original_image)
         col2.image(image0)
     else:
-        st.image([original_image, image0])
+        st.image(original_image)
+        st.image(image0)
 
 
-    some_changes = np.any(np.array(activations))
-
-    if some_changes:
+    if type(image0)==np.ndarray:
         image_download = Image.fromarray(image0.copy())
     else:
         image_download = image0.copy()
@@ -418,8 +396,6 @@ def streamlit_loop():
 
 if __name__=='__main__':
     streamlit_loop()
-
-
 
 
 
